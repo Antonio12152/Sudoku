@@ -1,3 +1,5 @@
+const SET_VALUE = "set value";
+const START_GAME = "start game"
 const dataOption = {
     chooseOption() {
         return Math.floor(Math.random() * this.option.length);
@@ -79,6 +81,27 @@ const randomOptionChoose = (state, dataOption) => {
     }
 }
 const level1Reduser = (state = initialState, action) => {
+    switch (action.type) {
+        case SET_VALUE:
+            let newState = {
+                ...state,
+                matrix: {
+                    ...state.matrix,
+                    start: [...state.matrix.start]
+                },
+            }
+            if (state.matrix.end[action.indexArr[0]][action.indexArr[1]] === +action.value) {
+                newState.matrix.start[action.indexArr[0]][action.indexArr[1]] = +action.value
+            } else {
+                newState.errors++
+            }
+            return newState;
+        case START_GAME:
+            return randomOptionChoose(state, dataOption)
+    }
     return randomOptionChoose(state, dataOption)
 }
+
+export const setValue = (value, indexArr) => ({ type: SET_VALUE, value, indexArr })
+export const startGame = () => ({ type: START_GAME })
 export default level1Reduser;
